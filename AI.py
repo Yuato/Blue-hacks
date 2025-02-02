@@ -3,16 +3,41 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
+import util as util
+import csv
 
 # Step 2: Get data
-x = np.arange(20).reshape(-1, 2)
-y = np.array([0, 1, 0, 0, 1, 1, 1, 1, 1, 1])
+def organize_data(directory):
+    plastics = []
+    array = []
+    currstr = ""
+    # load csv file
+    with open(directory, encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if (currstr!=row["PARTICLE"]):
+                plastics.append(util.stringtofloat(array))
+                array = []
+                currstr=row["PARTICLE"]
+            array.append(row["INTENSITY"])
+        plastics.append(util.stringtofloat(array))
+
+    return plastics
+
+plastics = organize_data("PlasticData.csv")
+plastics.pop(0)
+
+array = []
+
+x = np.array(plastics)
+for i in range (len(plastics)):
+    array.append(i%2)
+y = np.array(array)
 
 # Step 3: Create a model and train it
 model = LogisticRegression(solver='liblinear', C=10.0, random_state=0)
 model.fit(x, y)
-print(model.classes_)
-# Step 4: Evaluate the model
+#Step 4: Evaluate the model
 p_pred = model.predict_proba(x)
 y_pred = model.predict(x)
 score_ = model.score(x, y)
