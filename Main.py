@@ -21,10 +21,10 @@ class element():
             
             B = np.array(test)
         
-            #compute cosine similarity
+            #Compute cosine similarity
             cosine = util.cosine_similarity(A,B)
 
-            #R^2 test
+            #Compute R^2 value
             R2 = util.r_squared(test,self.f)
 
             if (cosine>self.likely[1] and R2>0.95):
