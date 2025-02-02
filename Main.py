@@ -31,6 +31,9 @@ class element():
                 self.likely = (name, cosine, R2)
 
     def identify(self):
+        if (self.likely[0]==""):
+            return None
+        
         return self.likely
 
 def main():
